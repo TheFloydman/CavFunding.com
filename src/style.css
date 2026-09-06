@@ -79,3 +79,14 @@ body {
 #download {
   text-align: center;
 }
+
+.chart-title {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+div.chart-container-interior {
+  border-top: 1px solid;
+  padding: 16px 0 16px 0;
+}

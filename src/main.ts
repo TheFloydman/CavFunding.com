@@ -42,7 +42,7 @@ function postToElement(elementId: string, options: ApexCharts.ApexOptions): void
   }
 }
 
-function buildOptions(series: ApexCharts.ApexNonAxisChartSeries, categories: (string | number)[][] | (string | number)[], chartLabel: string, xAxisLabel: string, yAxisLabel: string, strokeWidth: number | number[], isPercent = false): ApexCharts.ApexOptions {
+function buildOptions(series: ApexCharts.ApexNonAxisChartSeries, categories: (string | number)[][] | (string | number)[], chartLabel: string | undefined, xAxisLabel: string, yAxisLabel: string, strokeWidth: number | number[], isPercent = false): ApexCharts.ApexOptions {
   return {
     chart: {
       type: "line",
@@ -56,26 +56,24 @@ function buildOptions(series: ApexCharts.ApexNonAxisChartSeries, categories: (st
         enabled: true
       }
     },
+    grid: {
+      padding: {
+        top: 16,
+        right: 16,
+        bottom: 16,
+        left: 32
+      }
+    },
+    legend: {
+      offsetY: 0
+    },
     series: series,
-    xaxis: {
-      categories: categories,
-      title: {
-        text: xAxisLabel
-      }
-    },
-    yaxis: {
-      title: {
-        text: yAxisLabel
-      },
-      labels: {
-        formatter: isPercent ? function (value: number) {
-          return (value * 100).toString() + "%";
-        } : undefined
-      }
-    },
     stroke: {
       curve: "smooth",
       width: strokeWidth
+    },
+    theme: {
+      follow: "os"
     },
     title: {
       text: chartLabel,
@@ -84,8 +82,23 @@ function buildOptions(series: ApexCharts.ApexNonAxisChartSeries, categories: (st
         fontSize: "18px"
       }
     },
-    theme: {
-      mode: "light"
+    xaxis: {
+      categories: categories,
+      title: {
+        text: xAxisLabel
+      }
+    },
+    yaxis: {
+      title: {
+        text: yAxisLabel,
+        offsetX: -8
+      },
+      labels: {
+        formatter: isPercent ? function (value: number) {
+          return (value * 100).toString() + "%";
+        } : undefined,
+        offsetX: 16
+      }
     }
   };
 }
@@ -118,7 +131,7 @@ function parseCsvCavFunding(csvText: string) {
 
 const { cavFundingCategories, cavFundingSeries } = parseCsvCavFunding(rawCsvData);
 
-const cavFundingOptions = buildOptions(cavFundingSeries, cavFundingCategories, "Monthly Donations & Reserves", "Month/Year", "Percentage", [1, 3, 3], true);
+const cavFundingOptions = buildOptions(cavFundingSeries, cavFundingCategories, "", "Month/Year", "Percentage", [1, 3, 3], true);
 
 postToElement("cavfunding", cavFundingOptions);
 
@@ -142,7 +155,7 @@ function parseCsvCavcon(csvText: string) {
 
 const { cavconCategories, cavconSeries } = parseCsvCavcon(rawCsvData);
 
-const cavconOptions = buildOptions(cavconSeries, cavconCategories, "CAVCON Level Over Time", "Month/Year", "CAVCON Level", 3);
+const cavconOptions = buildOptions(cavconSeries, cavconCategories, "", "Month/Year", "CAVCON Level", 3);
 
 postToElement("cavcon", cavconOptions);
 
@@ -171,7 +184,7 @@ function parseCsvPopulation(csvText: string) {
 
 const { populationCategories, populationSeries } = parseCsvPopulation(rawCsvData);
 
-const populationOptions = buildOptions(populationSeries, populationCategories, "Population Over Time", "Month/Year", "Population", 3);
+const populationOptions = buildOptions(populationSeries, populationCategories, "", "Month/Year", "Population", 3);
 
 postToElement("population", populationOptions);
 
@@ -207,7 +220,7 @@ function parseCsvVisits(csvText: string) {
 
 const { visitsCategories, visitsSeries } = parseCsvVisits(rawCsvData);
 
-const visitsOptions = buildOptions(visitsSeries, visitsCategories, "Monthly Population & Visits", "Month/Year", "Quantity", 3);
+const visitsOptions = buildOptions(visitsSeries, visitsCategories, "", "Month/Year", "Quantity", 3);
 
 postToElement("visits", visitsOptions);
 

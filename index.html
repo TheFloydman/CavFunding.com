@@ -11,16 +11,32 @@
 <body>
   <div id="main">
     <div id="title">CavFunding History for <em>Myst Online: Uru Live (again)</em></div>
-    <div id="disclaimer">Myst, Uru, MOUL, MOULa, and related marks are registered trademarks of Cyan, Inc. All rights reserved by Cyan.
+    <div id="disclaimer">Myst, Uru, MOUL, MOULa, and related marks are registered trademarks of Cyan, Inc. All rights
+      reserved by Cyan.
       This website is not official and is not endorsed by Cyan.</div>
-      <div id="donate">You can visit MOULa's official donation page <a href="https://mystonline.com/en/donate/" target="_blank" rel="noopener noreferrer">here</a>.</div>
-      <div id="download">Download source data <a href="/cavfunding.csv" download>here.</a></div>
-    <div id="cavfunding" class="chart"></div>
-    <div id="cavcon" class="chart"></div>
-    <div id="population" class="chart"></div>
-    <div id="visits" class="chart"></div>
-  </div>
-  <script type="module" src="/src/main.ts"></script>
+    <div id="donate">You can visit MOULa's official donation page <a href="https://mystonline.com/en/donate/"
+        target="_blank" rel="noopener noreferrer">here</a>.</div>
+    <div id="download">Download source data <a href="/cavfunding.csv" download>here</a>.</div>
+    <div id="charts-container">
+      <div class="chart-container-interior">
+        <div class="chart-title">Monthly Donations & Reserves</div>
+        <div id="cavfunding" class="chart"></div>
+      </div>
+      <div class="chart-container-interior">
+        <div class="chart-title">CAVCON Level Over Time</div>
+        <div id="cavcon" class="chart"></div>
+      </div>
+      <div class="chart-container-interior">
+        <div class="chart-title">Population Over Time</div>
+        <div id="population" class="chart"></div>
+      </div>
+      <div class="chart-container-interior">
+        <div class="chart-title">Monthly Population & Visits</div>
+          <div id="visits" class="chart"></div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
 </body>
 
 </html>
