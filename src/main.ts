@@ -167,8 +167,8 @@ function parseCsvPopulation(csvText: string) {
 
   const { dataRows, categories: populationCategories } = parseCsv(csvText);
 
-  const cavcon = {
-    name: "CAVCON",
+  const population = {
+    name: "Population",
     data: dataRows.map(row => row[7] === "" ? null : Number(row[7]))
   };
 
@@ -177,7 +177,7 @@ function parseCsvPopulation(csvText: string) {
     data: dataRows.map(row => row[9] === "" ? null : Number(row[9]))
   };
 
-  const populationSeries = [cavcon, totalVisits];
+  const populationSeries = [population, totalVisits];
 
   return { populationCategories, populationSeries };
 }
