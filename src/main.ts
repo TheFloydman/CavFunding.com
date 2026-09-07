@@ -42,11 +42,14 @@ function postToElement(elementId: string, options: ApexCharts.ApexOptions): void
   }
 }
 
-function buildOptions(series: ApexCharts.ApexNonAxisChartSeries, categories: (string | number)[][] | (string | number)[], chartLabel: string | undefined, xAxisLabel: string, yAxisLabel: string, strokeWidth: number | number[], isPercent = false): ApexCharts.ApexOptions {
+function buildOptions(series: ApexCharts.ApexNonAxisChartSeries, categories: (string | number)[][] | (string | number)[], chartLabel: string | undefined, xAxisLabel: string, yAxisLabel: string, strokeWidth: number | number[], args: {isPercent?: boolean, height?: number, logarithmic?: boolean} | undefined = undefined): ApexCharts.ApexOptions {
+  const isPercent = args?.isPercent;
+  const height = args?.height;
+  const logarithmic = args?.logarithmic;
   return {
     chart: {
       type: "line",
-      height: 500,
+      height: height === undefined ? 500 : height,
       fontFamily: "inherit",
       toolbar: {
         show: true,
@@ -94,11 +97,10 @@ function buildOptions(series: ApexCharts.ApexNonAxisChartSeries, categories: (st
         offsetX: -8
       },
       labels: {
-        formatter: isPercent ? function (value: number) {
-          return (value * 100).toString() + "%";
-        } : undefined,
+        formatter: isPercent ? (value) => new Intl.NumberFormat('en-US', {style: 'percent'}).format(value) : undefined,
         offsetX: 16
-      }
+      },
+      logarithmic: logarithmic
     }
   };
 }
@@ -131,7 +133,7 @@ function parseCsvCavFunding(csvText: string) {
 
 const { cavFundingCategories, cavFundingSeries } = parseCsvCavFunding(rawCsvData);
 
-const cavFundingOptions = buildOptions(cavFundingSeries, cavFundingCategories, "", "Month/Year", "Percentage", [1, 3, 3], true);
+const cavFundingOptions = buildOptions(cavFundingSeries, cavFundingCategories, "", "Month/Year", "Percentage", [1, 3, 3], {isPercent: true});
 
 postToElement("cavfunding", cavFundingOptions);
 
@@ -163,7 +165,7 @@ postToElement("cavcon", cavconOptions);
 
 // Start Population
 
-function parseCsvPopulation(csvText: string) {
+function parseCsvNewVisits(csvText: string) {
 
   const { dataRows, categories: populationCategories } = parseCsv(csvText);
 
@@ -176,25 +178,6 @@ function parseCsvPopulation(csvText: string) {
     name: "Total Visits",
     data: dataRows.map(row => row[9] === "" ? null : Number(row[9]))
   };
-
-  const populationSeries = [population, totalVisits];
-
-  return { populationCategories, populationSeries };
-}
-
-const { populationCategories, populationSeries } = parseCsvPopulation(rawCsvData);
-
-const populationOptions = buildOptions(populationSeries, populationCategories, "", "Month/Year", "Population", 3);
-
-postToElement("population", populationOptions);
-
-// End Population
-
-// Start Visits
-
-function parseCsvVisits(csvText: string) {
-
-  const { dataRows, categories: visitsCategories } = parseCsv(csvText);
 
   const changeInPopulation = {
     name: "Change in Population",
@@ -213,15 +196,15 @@ function parseCsvVisits(csvText: string) {
     data: dataRows.map(row => row[8] === "" ? null : Number(row[8]))
   };
 
-  const visitsSeries = [changeInPopulation, uniqueVisits];
+  const populationSeries = [population, totalVisits, changeInPopulation, uniqueVisits];
 
-  return { visitsCategories, visitsSeries };
+  return { populationCategories, populationSeries };
 }
 
-const { visitsCategories, visitsSeries } = parseCsvVisits(rawCsvData);
+const { populationCategories, populationSeries } = parseCsvNewVisits(rawCsvData);
 
-const visitsOptions = buildOptions(visitsSeries, visitsCategories, "", "Month/Year", "Quantity", 3);
+const populationOptions = buildOptions(populationSeries, populationCategories, "", "Month/Year", "Quantity", 3, {height: 1000, logarithmic: true});
 
-postToElement("visits", visitsOptions);
+postToElement("new-visits", populationOptions);
 
-// End Visits
+// End Population
