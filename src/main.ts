@@ -203,7 +203,7 @@ function parseCsvNewVisits(csvText: string) {
 
 const { populationCategories, populationSeries } = parseCsvNewVisits(rawCsvData);
 
-const populationOptions = buildOptions(populationSeries, populationCategories, "", "Month/Year", "Quantity", 3, {height: 1000, logarithmic: true});
+const populationOptions = buildOptions(populationSeries, populationCategories, "", "Month/Year", "Quantity", 3, {height: 500, logarithmic: true});
 
 postToElement("new-visits", populationOptions);
 
